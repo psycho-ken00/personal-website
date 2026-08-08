@@ -1,0 +1,36 @@
+site_name: Zefeng Chen
+site_description: 陈泽锋（Bryce Chen）的人因工程、用户体验研究与人机交互作品集
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+  palette:
+    scheme: default
+    primary: white
+    accent: indigo
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra_css:
+  - assets/css/custom.css
+
+extra_javascript:
+  - assets/js/custom.js
+
+copyright: Copyright &copy; 2026 Zefeng Chen
