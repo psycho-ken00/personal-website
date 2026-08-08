@@ -1,5 +1,8 @@
 site_name: Zefeng Chen
 site_description: 陈泽锋（Bryce Chen）的人因工程、用户体验研究与人机交互作品集
+site_url: https://psycho-ken00.github.io/personal-website/
+repo_url: https://github.com/psycho-ken00/personal-website
+repo_name: psycho-ken00/personal-website
 theme:
   name: material
   language: zh
