@@ -9,3 +9,7 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 
+# Local package cache and Finder metadata
+.pnpm-store/
+.DS_Store
+

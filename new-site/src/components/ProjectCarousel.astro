@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props { projects: CollectionEntry<'cases'>[] }
+const { projects } = Astro.props;
+---
+
+<div class="project-carousel" data-project-carousel role="region" aria-roledescription="轮播" aria-label="精选项目">
+  <div class="project-carousel-track" data-carousel-track tabindex="0" aria-label="精选项目，可横向滚动">
+    {projects.map((project, index) => <div class="project-slide" data-carousel-slide role="group" aria-roledescription="幻灯片" aria-label={`第 ${index + 1} 个，共 ${projects.length} 个项目`}><ProjectCard project={project} /></div>)}
+  </div>
+  <div class="project-carousel-dots" role="group" aria-label="选择项目">
+    {projects.map((project, index) => <button type="button" data-carousel-dot data-slide-index={index} aria-label={`查看项目：${project.data.title}`} aria-pressed={index === 0 ? 'true' : 'false'}><span></span></button>)}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-project-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-carousel-track]');
+    if (!track) return;
+    const slides = [...track.querySelectorAll<HTMLElement>('[data-carousel-slide]')];
+    const dots = [...carousel.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]')];
+    const slideLeft = (slide: HTMLElement) => slide.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft;
+    const update = () => {
+      let active = 0;
+      let distance = Infinity;
+      slides.forEach((slide, index) => {
+        const nextDistance = Math.abs(slideLeft(slide) - track.scrollLeft);
+        if (nextDistance < distance) { active = index; distance = nextDistance; }
+      });
+      dots.forEach((dot, index) => dot.setAttribute('aria-pressed', String(index === active)));
+    };
+    let ticking = false;
+    track.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { update(); ticking = false; });
+    }, { passive: true });
+    dots.forEach((dot, index) => dot.addEventListener('click', () => {
+      track.scrollTo({ left: slideLeft(slides[index]), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      dots.forEach((item, itemIndex) => item.setAttribute('aria-pressed', String(itemIndex === index)));
+    }));
+    window.addEventListener('resize', update);
+    update();
+  });
+</script>

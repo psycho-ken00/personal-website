@@ -1,0 +1,49 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sitePath } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases');
+  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+interface Props { entry: CollectionEntry<'cases'> }
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+---
+
+<BaseLayout title={`${data.title} | 陈泽锋`} description={data.summary}>
+  <article class="detail-page">
+    <header class="detail-hero container">
+      <a class="back-link" href={sitePath('/#projects')}>返回精选项目</a>
+      <p class="eyebrow">{data.category} · {data.period}</p>
+      <h1>{data.title}</h1>
+      <p class="detail-lead">{data.summary}</p>
+      <div class="detail-tags" aria-label="使用的方法">
+        {data.methods.map((method) => <span>{method}</span>)}
+      </div>
+    </header>
+
+    <div class="detail-cover container">
+      {data.cover ? <img src={sitePath(data.cover)} alt={data.coverAlt ?? ''} /> : <div class={`project-art art-${data.art}`} role="img" aria-label="抽象几何示意图，非真实项目截图"><span></span><span></span><span></span></div>}
+      {!data.cover && <p>示意图 · 不展示企业内部图片或私有产品截图</p>}
+    </div>
+
+    <div class="container detail-body-grid">
+      <aside class="detail-facts" aria-label="案例概览">
+        <div><span>我的角色</span><p>{data.role}</p></div>
+        <div><span>个人贡献</span><p>{data.contribution}</p></div>
+        <div><span>可确认产出</span><p>{data.outcome}</p></div>
+        <div><span>边界与限制</span><p>{data.limitations}</p></div>
+        {data.publicationStatus === 'private-demo' && <p class="private-note">产品演示目前为私有访问，案例页不提供公开演示链接。</p>}
+      </aside>
+      <div class="detail-prose"><Content /></div>
+    </div>
+    <nav class="detail-end container" aria-label="案例后续操作">
+      <a href={sitePath('/#projects')}>查看其他项目</a>
+      <a href={sitePath('/#contact')}>联系我</a>
+    </nav>
+  </article>
+</BaseLayout>

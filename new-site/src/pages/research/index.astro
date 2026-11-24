@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { researchProjects, publications, posters } from '../../data/research';
+import { sitePath } from '../../lib/paths';
+---
+
+<BaseLayout title="研究成果 | 陈泽锋" description="陈泽锋在人因工程、人机信任、智能驾驶交互与认知研究中的项目、论文及会议海报。">
+  <header class="research-hero container">
+    <a class="back-link" href={sitePath('/#research')}>返回首页研究摘要</a>
+    <p class="eyebrow">RESEARCH</p>
+    <h1>研究成果</h1>
+    <p>我关注人在智能系统中的理解、信任与行动。研究从实验、行为和多模态证据出发，连接认知机制与交互设计。</p>
+    <nav class="research-local-nav" aria-label="研究页目录">
+      <a href="#projects">研究项目</a><a href="#publications">期刊论文</a><a href="#posters">会议海报</a>
+    </nav>
+  </header>
+
+  <section class="section container" id="projects" aria-labelledby="research-projects-title">
+    <SectionHeading eyebrow="SELECTED RESEARCH" title="代表研究项目" id="research-projects-title" description="每项记录区分研究过程、个人参与和目前可确认的产出状态。" />
+    <div class="research-project-list">
+      {researchProjects.map((project) => <article>
+        <div class="research-project-meta"><span>{project.theme}</span><time>{project.period}</time></div>
+        <div><p class="eyebrow">{project.affiliation}</p><h3>{project.title}</h3><p>{project.contribution}</p><p class="research-status"><strong>目前状态</strong> {project.status}</p></div>
+      </article>)}
+    </div>
+  </section>
+
+  <section class="section research-publications" id="publications" aria-labelledby="publications-title">
+    <div class="container">
+      <SectionHeading eyebrow="PUBLICATIONS" title="期刊论文" id="publications-title" description="3 篇共同作者论文；作者列表按背景资料中的书目信息完整列示。" />
+      <ol class="bibliography-list">
+        {publications.map((item) => <li><span class="bib-year">{item.year}</span><div><p class="bib-venue">{item.journal}</p><h3>{item.title}</h3><p>{item.authors}</p><p class="bib-note">{item.authorship}</p></div></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section container" id="posters" aria-labelledby="posters-title">
+    <SectionHeading eyebrow="CONFERENCE POSTERS" title="会议海报" id="posters-title" description="仅列出展示形式已确认的两项第一作者海报。" />
+    <ol class="bibliography-list">
+      {posters.map((item) => <li><span class="bib-year">{item.year}</span><div><p class="bib-venue">{item.venue}</p><h3>{item.title}</h3><p>{item.authors}</p><p class="bib-note">{item.note}</p></div></li>)}
+    </ol>
+  </section>
+</BaseLayout>
