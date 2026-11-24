@@ -1,0 +1,14 @@
+:root {
+  color-scheme: light;
+  --color-canvas: #f7f5ef;
+  --color-surface: #ffffff;
+  --color-ink: #202632;
+  --color-muted: #5e6570;
+  --color-vermilion: #c94a32;
+  --color-cobalt: #315bb5;
+  --color-yellow: #f4cd63;
+  --color-mint: #d5ead8;
+  --color-border: #d9d7d0;
+  --content-width: 70rem;
+  --radius-card: 1rem;
+}

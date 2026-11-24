@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { sitePath } from '../lib/paths';
+interface Props { project: CollectionEntry<'cases'> }
+const { project } = Astro.props;
+const { data } = project;
+---
+
+<article class="project-card">
+  <div class={`project-art art-${data.art}`} aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="project-content">
+    <p class="project-category">{data.category}</p>
+    <h3><a class="card-link" href={sitePath(`/cases/${project.id}/`)}>{data.title}</a></h3>
+    <p>{data.summary}</p>
+    <p class="project-role"><strong>我的参与</strong> {data.role}</p>
+    <ul class="tag-list" aria-label="项目方法与主题">
+      {data.methods.slice(0, 3).map((method) => <li>{method}</li>)}
+    </ul>
+  </div>
+</article>

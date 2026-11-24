@@ -1,0 +1,91 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { profile } from '../data/profile';
+import { sitePath } from '../lib/paths';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${profile.name} | 人因研究与产品实践`,
+  description = profile.introduction,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(sitePath('/images/portrait-illustration.jpg'), Astro.site);
+const navigation = [
+  { label: '项目', href: '/#projects' },
+  { label: '经历与教育', href: '/#experience' },
+  { label: '能力', href: '/#skills' },
+  { label: '研究', href: '/#research' },
+  { label: '联系', href: '/#contact' },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F7F5EF" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="1000" />
+    <meta property="og:image:alt" content="陈泽锋在书桌前的风格化个人形象" />
+    <meta name="twitter:card" content="summary" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳转到主要内容</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={sitePath('/')} aria-label="陈泽锋，返回首页">
+          <span class="brand-mark" aria-hidden="true"><img src={sitePath('/images/portrait-headshot.jpg')} alt="" width="40" height="40" /></span>
+          <span>{profile.name}</span>
+        </a>
+        <nav class="desktop-nav" aria-label="主导航">
+          {navigation.map((item) => <a href={sitePath(item.href)}>{item.label}</a>)}
+        </nav>
+        <details class="mobile-nav">
+          <summary aria-label="打开导航菜单">菜单</summary>
+          <nav aria-label="移动端主导航">
+            {navigation.map((item) => <a href={sitePath(item.href)}>{item.label}</a>)}
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer" id="contact">
+      <div class="container footer-inner">
+        <div>
+          <p class="eyebrow">CONTACT</p>
+          <h2>让我们聊聊</h2>
+          <p>欢迎交流人因研究、AI 产品与用户体验相关机会。</p>
+        </div>
+        <div class="footer-actions">
+          <a class="footer-email" href={`mailto:${profile.email}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></svg><span>{profile.email}</span></a>
+          <a class="footer-phone" href={`tel:${profile.phone.replace(/\s/g, '')}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.6 3.5h3l1.3 4.1-1.8 1.8a15 15 0 0 0 5.5 5.5l1.8-1.8 4.1 1.3v3a2 2 0 0 1-2.2 2A17.4 17.4 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z" /></svg><span>{profile.phone}</span></a>
+          <a href={`mailto:${profile.email}?subject=${encodeURIComponent('索取简历')}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5h7l4 4V20H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z" /><path d="M14 3.5V8h4M9 12h6M9 16h6" /></svg><span>邮件获取简历</span></a>
+        </div>
+      </div>
+      <div class="container footer-bottom"><span>© {new Date().getFullYear()} {profile.romanizedName}</span></div>
+    </footer>
+    <script>
+      document.querySelectorAll<HTMLDetailsElement>('.mobile-nav').forEach((menu) => {
+        menu.querySelectorAll('nav a').forEach((link) => {
+          link.addEventListener('click', () => { menu.open = false; });
+        });
+      });
+    </script>
+  </body>
+</html>
